@@ -171,5 +171,37 @@ def find_settlement_parent(
     )
 
 
+
+@server.tool()
+def count_settlements(
+    level: str = "ukraine",
+    name: str = "",
+    code: str = "",
+    region: str = "",
+    district: str = "",
+) -> dict:
+    """Порахувати міста, селища та села України за даними КАТОТТГ.
+
+    Рівні: ukraine, region, district, community.
+
+    Приклади:
+    - Скільки сіл в Україні?
+    - Скільки міст у Чернігівській області?
+    - Скільки селищ у Чернігівському районі?
+    - Скільки сіл в Іванівській громаді?
+
+    Повертає кількість міст, селищ, сіл та загальну кількість.
+    Для уточнення однойменних територій використовуйте
+    region, district або офіційний код КАТОТТГ.
+    """
+    from servers.settlement_counts import count_settlements as lookup
+    return lookup(
+        level=level,
+        name=name,
+        code=code,
+        region=region,
+        district=district,
+    )
+
 if __name__ == "__main__":
     server.run(transport="stdio")
