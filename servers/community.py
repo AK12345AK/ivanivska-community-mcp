@@ -145,5 +145,31 @@ def search_community_natural(query: str) -> dict:
     return search_community_in_text(query)
 
 
+@server.tool()
+def find_settlement_parent(
+    name: str,
+    region: str = "",
+    district: str = "",
+) -> dict:
+    """Визначити громаду, район і область населеного пункту України.
+
+    Підтримує українські та англійські назви.
+    Приклади: Количівка, Kolychivka, Ягідне, Ivanivka.
+
+    Якщо існують однойменні населені пункти, повертає всі
+    відповідні варіанти з кодами КАТОТТГ для уточнення.
+
+    Параметри region і district дозволяють уточнити пошук.
+    """
+    from servers.settlement_parent import (
+        find_settlement_parent as lookup
+    )
+    return lookup(
+        name,
+        region=region,
+        district=district,
+    )
+
+
 if __name__ == "__main__":
     server.run(transport="stdio")
