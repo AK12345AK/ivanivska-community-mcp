@@ -203,5 +203,40 @@ def count_settlements(
         district=district,
     )
 
+
+@server.tool()
+def list_communities(
+    region: str = "",
+    district: str = "",
+    region_code: str = "",
+    district_code: str = "",
+) -> dict:
+    """Отримати перелік територіальних громад України з кодами КАТОТТГ.
+
+    Дозволяє знайти всі громади певної області або району.
+
+    Приклади запитів:
+    - Покажи всі громади Чернігівської області.
+    - Які громади входять до Чернігівського району?
+    - Назви всі громади району та їхні коди КАТОТТГ.
+
+    Параметри:
+    - region: назва області, наприклад Чернігівська.
+    - district: назва району, наприклад Чернігівський.
+    - region_code: код КАТОТТГ області.
+    - district_code: код КАТОТТГ району.
+
+    Для однойменних районів уточнюйте область.
+    Повертає кількість громад та повний перелік із кодами.
+    """
+    from servers.community_listing import list_communities as lookup
+
+    return lookup(
+        region=region,
+        district=district,
+        region_code=region_code,
+        district_code=district_code,
+    )
+
 if __name__ == "__main__":
     server.run(transport="stdio")
