@@ -59,5 +59,91 @@ def get_sources() -> dict:
         },
     }
 
+
+@server.tool()
+def search_katottg(query: str, limit: int = 20) -> list[dict]:
+    """Пошук адміністративних одиниць України за українською назвою."""
+    from servers.katottg_search import search_by_name
+    return search_by_name(query, limit)
+
+
+@server.tool()
+def get_katottg_record(code: str) -> dict:
+    """Отримати адміністративну одиницю за кодом КАТОТТГ."""
+    from servers.katottg_search import find_by_code
+    return find_by_code(code) or {"error": "Код не знайдено"}
+
+
+@server.tool()
+def get_katottg_children(code: str) -> list[dict]:
+    """Отримати безпосередні дочірні адміністративні одиниці."""
+    from servers.katottg_search import get_children
+    return get_children(code)
+
+
+
+@server.tool()
+def search_katottg_by_location(
+    query: str,
+    region: str = "",
+    district: str = "",
+    limit: int = 20,
+) -> list[dict]:
+    """Пошук громад і населених пунктів України за назвою, областю та районом.
+
+    Підтримує українські й англійські назви, зокрема
+    Ivanivska Community, Іванівська ОТГ, Kolychivka.
+    """
+    from servers.katottg_search import search_by_location
+    return search_by_location(
+        query,
+        region=region,
+        district=district,
+        limit=limit,
+    )
+
+
+
+@server.tool()
+def find_community_settlements(
+    query: str,
+    region: str = "",
+    district: str = "",
+) -> dict:
+    """Знайти територіальну громаду України та всі її населені пункти.
+
+    Підтримує українські й англійські назви:
+    Іванівська ОТГ, Ivanivska Community.
+
+    Для однойменних громад можна уточнити область і район.
+    Якщо уточнень недостатньо, повертає список громад
+    замість випадкового вибору.
+    """
+    from servers.katottg_search import (
+        find_community_settlements as lookup
+    )
+    return lookup(
+        query,
+        region=region,
+        district=district,
+    )
+
+
+
+@server.tool()
+def search_community_natural(query: str) -> dict:
+    """Знайти громаду України та її населені пункти за звичайним реченням.
+
+    Приклади:
+    - Покажи всі села Іванівської громади Чернігівського району
+    - Іванівська громада Чернігівський район
+    - Ivanivska Community Chernihivskyi District
+
+    Якщо назва неоднозначна, повертає варіанти для уточнення.
+    """
+    from servers.natural_search import search_community_in_text
+    return search_community_in_text(query)
+
+
 if __name__ == "__main__":
     server.run(transport="stdio")
