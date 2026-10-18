@@ -26,3 +26,34 @@ credentials/
 # Editors
 .vscode/
 .idea/
+
+# Server backups and temporary versions
+backups/
+*.backup*
+*.before_*
+*.step*-backup
+*.pre_cache
+*.eviction_broken
+
+# Private feedback and staging data
+data/feedback/
+data/staging/
+
+# Generated publication repositories and registries
+generated-repos/
+national-repos/
+registry/
+
+# Local databases and runtime artifacts
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Temporary publication tracking
+data/official/github-*.json
+data/official/territorial-mcp-urls.txt
+
+# Local server scripts and experiments
+http_app_test.py
+publish_github_*.py
